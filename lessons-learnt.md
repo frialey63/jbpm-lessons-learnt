@@ -2,7 +2,7 @@
 
 JBPM 7.61.0.Final (last version on Docker Hub)
 
-# Rest Interface
+## Rest Interface
 
 The Swagger documentation for the interface is available at URL `http://localhost:8080/kie-server/docs/`
 
@@ -45,7 +45,7 @@ the Business Central work item importer became completely broken!
 Do not embed number(s) into the name of a work item.  The WI will import but if the WID uses the same name (which it should for consistency) then embedded numbers will cause the WI to not be shown in the
 Business Central task selection dialog and hence it cannot be added to a process diagram!
 
-## DRL Files
+## Business Rules (DRL Files)
 
 In order to execute the business rules it is necessary to specify the rule flow group in the DRL
 
