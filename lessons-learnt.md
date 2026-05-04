@@ -25,7 +25,9 @@ https://github.com/kiegroup/jbpm-work-items
 ### Constructor Parameters
 
 Some custom WI have constructor parameters which need to be set when the work item handler (WIH) is added to the JBPM project in the deployment settings.  The WIH
-should be added automatically, including its relevant parameter values, when it is installed into a project via settings but this is not reliable. (It is recommended to verify parameters by inspection of the main Java file).  The constructor parameters are specified in the `serviceInfo.authInfo` section of `@Wid` descriptor of the WIH main class.
+should be added automatically, including its relevant parameter values, when it is installed into a project via settings but this is not reliable. (It is recommended to verify parameters by inspection of the main Java file).  The constructor parameters are specified in the `serviceInfo.authInfo` section of `@Wid` descriptor of the WIH main class, and are used to configure empty values or to prompt for values.
+
+After a custom WIH has been installed it is necessary to add the jar explicitly into the project dependencies.
 
 ### CLASSPATH Hell
 
@@ -35,6 +37,8 @@ it is not sufficient to just add it as a separate dependency to the JBPM project
 If the dependencies of a custom work item are changed, then following upload of the updated WI jar it is necessary to stop and remove any dependent JBPM project/server before their redeployment.
 
 When a WI is updated is it recommended to increment the project version in the POM before rebuild and upload to Busness Central.
+
+To build a custom WIH project it is necessary to use the JDK (re Eclipse IDE build settings).
 
 Sometimes I cannot make a custom WIH run without classpath errors, even when for an uber jar built by the Maven assembly plugin (and all dependencies and transitive dependencies specified in the POM).
 
