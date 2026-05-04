@@ -36,6 +36,8 @@ If the dependencies of a custom work item are changed, then following upload of 
 
 When a WI is updated is it recommended to increment the project version in the POM before rebuild and upload to Busness Central.
 
+Sometimes I cannot make a custom WIH run without classpath errors, even when for an uber jar built by the Maven assembly plugin (and all dependencies and transitive dependencies specified in the POM).
+
 ### Maven Archetype
 
 When creating a new custom WI from scratch it is important to generate it from the Maven archetype, do not be tempted to clone and edit an existing project.  When this was tried once, 
