@@ -25,7 +25,7 @@ https://github.com/kiegroup/jbpm-work-items
 ### Constructor Parameters
 
 Some custom WI have constructor parameters which need to be set when the work item handler (WIH) is added to the JBPM project in the deployment settings.  The WIH
-should be added automatically, including its relevant parameter values, when it is installed into a project via settings but this is not reliable. (It is recommended to verify parameters by inspection of the main Java file).
+should be added automatically, including its relevant parameter values, when it is installed into a project via settings but this is not reliable. (It is recommended to verify parameters by inspection of the main Java file).  The constructor parameters are specified in the `serviceInfo.authInfo` section of `@Wid` descriptor of the WIH main class.
 
 ### CLASSPATH Hell
 
