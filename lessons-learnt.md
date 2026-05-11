@@ -27,7 +27,33 @@ https://github.com/kiegroup/jbpm-work-items
 Some custom WI have constructor parameters which need to be set when the work item handler (WIH) is added to the JBPM project in the deployment settings.  The WIH
 should be added automatically, including its relevant parameter values, when it is installed into a project via settings but this is not reliable. (It is recommended to verify parameters by inspection of the main Java file).  The constructor parameters are specified in the `serviceInfo.authInfo` section of `@Wid` descriptor of the WIH main class, and are used to configure empty values or to prompt for values.
 
+### Misc
+
 After a custom WIH has been installed it is necessary to add the jar explicitly into the project dependencies.
+
+When using Settings | Custom Tasks Admin, sometimes the upload of the WI jar is reported as being successful but the custom task is not listed for switch on/off.  In this case, it should be possible to still utilise the WI in a project but it is necessary to create the WID manually using the editor, e.g.
+
+	[
+	        [
+	            "name" : "ChGenericRestGetDefinitions",
+	            "displayName" : "ChGenericRestGetDefinitions",
+	            "category" : "ch-generic-rest-get-workitem",
+	            "description" : "",
+	            "defaultHandler" : "mvel: new uk.gov.ch.ChGenericRestGetWorkItemHandler(\"baseUrl\")",
+	            "documentation" : "form-xml-to-java/index.html",
+	            "parameters" : [
+	                                "Method" : new StringDataType(),
+	                                "FormXml" : new StringDataType()
+	            ],
+	            "results" : [
+	                                "Result" : new ObjectDataType()
+	            ],
+	            "mavenDependencies" : [
+	                                 "uk.gov.ch:ch-generic-rest-get-workitem:1.0.0-SNAPSHOT"
+	            ],
+	            "icon" : "ChGenericRestGetDefinitions.png"
+	        ]
+	]
 
 ### CLASSPATH Hell
 
