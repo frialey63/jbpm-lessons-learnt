@@ -27,6 +27,16 @@ https://github.com/kiegroup/jbpm-work-items
 Some custom WI have constructor parameters which need to be set when the work item handler (WIH) is added to the JBPM project in the deployment settings.  The WIH
 should be added automatically, including its relevant parameter values, when it is installed into a project via settings but this is not reliable. (It is recommended to verify parameters by inspection of the main Java file).  The constructor parameters are specified in the `serviceInfo.authInfo` section of `@Wid` descriptor of the WIH main class, and are used to configure empty values or to prompt for values.
 
+### Input Variables
+
+A custom WI has an input parameter `Param` which has been assigned from a process variable `theParam` but when the WI executes the following error is encountered
+
+    Caused by: java.lang.IllegalArgumentException: Workitem declares following required parameter which does not exist: Param
+
+This is because the process variable has not been set correctly in the script (task), it is necessary to utilise the following code
+
+    kcontext.setVariable("theParam", "value");
+
 ### Misc
 
 After a custom WIH has been installed it is necessary to add the jar explicitly into the project dependencies.
