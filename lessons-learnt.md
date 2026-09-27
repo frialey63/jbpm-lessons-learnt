@@ -96,3 +96,11 @@ In order to execute business rules it is necessary to specify the rule flow grou
 		    ruleflow-group "cs01-rfg"
 
 and to reference this is the rules task.
+
+## Process Variables
+
+Accessing JBPM process variables using the Java client library is problematic.  If the process variable has a complex object struture, e.g. containing arrays and/or untyped parts then it may not be marshalled correctly and attributes will be missing.  The specific conditions which cause failure have not been identified.  A lot of time was wasted trying to get these to work, including an extensive debugging session using co-pilot.  There are two work-arounds:
+
+- Marshall variables to JSON or XML within the process and retrieve them as string
+- Use the REST API either from curl or Apache http-client to access the variables, this seems to be 100% reliable
+
