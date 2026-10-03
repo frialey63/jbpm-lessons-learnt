@@ -104,3 +104,10 @@ Accessing JBPM process variables using the Java client library is problematic.  
 - Marshall variables to JSON or XML within the process and retrieve them as string
 - Use the REST API either from curl or Apache http-client to access the variables, this seems to be 100% reliable
 
+## Forms
+
+Sometimes automatic and/or manual form creation fails to complete with a spinning progress indicator.  In this case the only recourse appears to be to restart the JBPM server!  After doing this check the `src/main/resources` folder and delete any unwanted `.frm` file then re-attempt the manual form creation which will (hopefully) now succeed.
+
+## Execution Server
+
+If a server is showing as RED after deployment then stop and remove the server, this may clear a temporary problem.
