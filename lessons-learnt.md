@@ -2,6 +2,54 @@
 
 JBPM 7.61.0.Final (last version on Docker Hub)
 
+## Jaeger Logging
+
+If your JBPM Docker log file is swamped by continuous stream of the following messages
+
+```
+8:12:09,518 WARN  [io.jaegertracing.internal.reporters.RemoteReporter] (jaeger.RemoteReporter-QueueProcessor) FlushCommand execution failed! Repeated errors of this command will not be logged.: io.jaegertracing.internal.exceptions.SenderException: Failed to flush spans.
+        at io.jaegertracing.jaeger@1.5.0//io.jaegertracing.thrift.internal.senders.ThriftSender.flush(ThriftSender.java:115)
+        at io.jaegertracing.jaeger@1.5.0//io.jaegertracing.internal.reporters.RemoteReporter$FlushCommand.execute(RemoteReporter.java:160)
+        at io.jaegertracing.jaeger@1.5.0//io.jaegertracing.internal.reporters.RemoteReporter$QueueProcessor.run(RemoteReporter.java:182)
+        at java.base/java.lang.Thread.run(Thread.java:834)
+Caused by: io.jaegertracing.internal.exceptions.SenderException: Could not send 1 spans
+        at io.jaegertracing.jaeger@1.5.0//io.jaegertracing.thrift.internal.senders.UdpSender.send(UdpSender.java:85)
+        at io.jaegertracing.jaeger@1.5.0//io.jaegertracing.thrift.internal.senders.ThriftSender.flush(ThriftSender.java:113)
+        ... 3 more
+Caused by: org.apache.thrift.transport.TTransportException: Cannot flush closed transport
+        at io.jaegertracing.jaeger@1.5.0//io.jaegertracing.thrift.internal.reporters.protocols.ThriftUdpTransport.flush(ThriftUdpTransport.java:148)
+        at org.apache.thrift@0.13.0//org.apache.thrift.TServiceClient.sendBase(TServiceClient.java:73)
+        at org.apache.thrift@0.13.0//org.apache.thrift.TServiceClient.sendBaseOneway(TServiceClient.java:66)
+        at io.jaegertracing.jaeger@1.5.0//io.jaegertracing.agent.thrift.Agent$Client.send_emitBatch(Agent.java:70)
+        at io.jaegertracing.jaeger@1.5.0//io.jaegertracing.agent.thrift.Agent$Client.emitBatch(Agent.java:63)
+        at io.jaegertracing.jaeger@1.5.0//io.jaegertracing.thrift.internal.senders.UdpSender.send(UdpSender.java:83)
+        ... 4 more
+Caused by: java.net.PortUnreachableException: ICMP Port Unreachable
+        at java.base/java.net.PlainDatagramSocketImpl.send(Native Method)
+        at java.base/java.net.DatagramSocket.send(DatagramSocket.java:695)
+        at io.jaegertracing.jaeger@1.5.0//io.jaegertracing.thrift.internal.reporters.protocols.ThriftUdpTransport.flush(ThriftUdpTransport.java:146)
+        ... 9 more
+```
+
+then these can be suppressed by running the following command(s)
+
+```
+# set logging LEVEL to ERROR (first-time setting)
+docker exec -it jbpm-server-full-99 /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="/subsystem=logging/logger=io.jaegertracing.internal.reporters.RemoteReporter:add(level=ERROR)"
+docker exec -it jbpm-server-full-99 /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="/subsystem=logging/logger=io.jaegertracing:add(level=ERROR)"
+
+# set logging LEVEL to OFF (if the level has been previously set)
+docker exec -it jbpm-server-full-99 /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="/subsystem=logging/logger=io.jaegertracing.internal.reporters.RemoteReporter:write-attribute(name=level,value=OFF)"
+docker exec -it jbpm-server-full-99 /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="/subsystem=logging/logger=io.jaegertracing:write-attribute(name=level,value=OFF)"
+
+# set Jaeger sampler parameter (may be necessary)
+docker exec -it jbpm-server-full-99 /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="/subsystem=microprofile-opentracing-smallrye/jaeger-tracer=jaeger:write-attribute(name=sampler-param,value=0)"
+docker exec -it jbpm-server-full-99 /opt/jboss/wildfly/bin/jboss-cli.sh --connect command=:reload
+
+# disable Jaeger
+docker exec -it jbpm-server-full-99 /opt/jboss/wildfly/bin/jboss-cli.sh --connect --command="/system-property=jaeger.disabled:add(value=true)"
+```
+
 ## Rest Interface
 
 The Swagger documentation for the interface is available at URL `http://localhost:8080/kie-server/docs/` with Business Central running.
@@ -115,3 +163,4 @@ Sometimes automatic and/or manual form creation fails to complete with a spinnin
 ## Execution Server
 
 If a server is showing as RED after deployment then stop and remove the server, this may clear a temporary problem.
+
